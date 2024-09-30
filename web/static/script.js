@@ -104,3 +104,8 @@ function resetForm() {
     document.getElementById('resultText').innerText = 'Result of your calculation';
     document.getElementById('resultValue').innerText = '';
 }
+
+// Load the default tab on page load
+document.addEventListener('DOMContentLoaded', () => {
+    showTab('length');
+});
