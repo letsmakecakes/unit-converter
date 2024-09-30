@@ -98,3 +98,9 @@ function convertTemperature() {
     document.getElementById('resultText').innerText = `Temperature Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
 }
 
+// Reset Function
+function resetForm() {
+    document.querySelectorAll('.input-section input').forEach(input => input.value = '');
+    document.getElementById('resultText').innerText = 'Result of your calculation';
+    document.getElementById('resultValue').innerText = '';
+}
