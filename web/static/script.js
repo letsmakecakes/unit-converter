@@ -49,3 +49,30 @@ function convertLength() {
     }
 }
 
+function convertWeight() {
+    const value = parseFloat(document.getElementById('weightInput').value);
+    const from = document.getElementById('weightFrom').value.trim().toLowerCase();
+    const to = document.getElementById('weightTo').value.trim().toLowerCase();
+
+    const conversions = {
+        kg: {
+            lbs: value * 2.20462,
+            g: value * 1000
+        },
+        lbs: {
+            kg: value / 2.20462,
+            g: value * 453.592
+        },
+        g: {
+            kg: value / 1000,
+            lbs: value / 453.592
+        }
+    };
+
+    const result = conversions[from] && conversions[from][to];
+    if(result !== undefined) {
+        document.getElementById('resultText').innerText = `Weight Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
+    } else {
+        document.getElementById('resultText').innerText = 'Invalud conversion  units.';
+    }
+}
