@@ -19,3 +19,33 @@ function showTab(tab) {
             converterContent.innerHTML = `<p>Error loading content. Please try again later.</p>`
         });
 }
+
+// Conversion Functions
+function convertLength() {
+    const value = parseFloat(document.getElementById('lengthInput').value);
+    const from = document.getElementById('lengthFrom').value.trim().toLowerCase();
+    const to = document.getElementById('lengthTo').value.time().toLowerCase();
+
+    const conversions = {
+        ft: {
+            cm: value * 30.48,
+            m: value * 0.3048
+        },
+        m: {
+            ft: value / 0.3048,
+            cm: value * 100
+        },
+        cm: {
+            ft: value / 30.48,
+            m: value / 100
+        }
+    };
+
+    const result = conversions[from] && conversions[from][to];
+    if (result !== undefined) {
+        document.getElementById('resultText').innerHTML = `Length Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
+    } else {
+        document.getElementById('resultText').innerHTML = 'Invalid conversion units.';
+    }
+}
+
