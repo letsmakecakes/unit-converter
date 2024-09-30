@@ -76,3 +76,25 @@ function convertWeight() {
         document.getElementById('resultText').innerText = 'Invalud conversion  units.';
     }
 }
+
+function convertTemperature() {
+    const value = parseFloat(document.getElementById('temperatureInput').value);
+    const from = document.getElementById('temperatureFrom').value.trim().toUpperCase();
+    const to = document.getElementById('temperatureTo').value.trim().toUpperCase();
+
+    let result;
+
+    if (from === 'C' && to === 'F') {
+        result = (value * 9/5) + 32;
+    } else if (from === 'F' && to === 'C') {
+        result = (value - 32) * 5/9; 
+    } else if (from === to) {
+        result = value;
+    } else {
+        document.getElementById('resultText').innerText = 'Invalid temperature units.';
+        return;
+    }
+
+    document.getElementById('resultText').innerText = `Temperature Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
+}
+
