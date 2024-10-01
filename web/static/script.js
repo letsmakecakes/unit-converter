@@ -1,111 +1,77 @@
-// Function to load HTML content dynamically
+// Function to show the correct tab based on user selection
 function showTab(tab) {
-    const converterContent = document.getElementById('converter-content');
-    fetch(`${tab}.html`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Could not fetch ${tab}.html`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            converterContent.innerHTML = data;
-            // Update active tab
-            document.querySelectorAll('.tabs a').forEach(a => a.classList.remove('active'));
-            document.getElementById(`${tab}-tab`).classList.add('active');
-        })
-        .catch(error => {
-            console.error('Error loading tab:', error);
-            converterContent.innerHTML = `<p>Error loading content. Please try again later.</p>`
-        });
+    // Hide all sections first
+    document.getElementById('length-section').style.display = 'none';
+    document.getElementById('weight-section').style.display = 'none';
+    document.getElementById('temperature-section').style.display = 'none';
+
+    // Remove the active class from all tabs
+    document.getElementById('length-tab').classList.remove('active');
+    document.getElementById('weight-tab').classList.remove('active');
+    document.getElementById('temperature-tab').classList.remove('active');
+
+    // Show the selected tab's section and add the active class
+    if (tab === 'length') {
+        document.getElementById('length-section').style.display = 'block';
+        document.getElementById('length-tab').classList.add('active');
+    } else if (tab === 'weight') {
+        document.getElementById('weight-section').style.display = 'block';
+        document.getElementById('weight-tab').classList.add('active');
+    } else if (tab === 'temperature') {
+        document.getElementById('temperature-section').style.display = 'block';
+        document.getElementById('temperature-tab').classList.add('active');
+    }
 }
 
-// Conversion Functions
+// Function to convert length
 function convertLength() {
-    const value = parseFloat(document.getElementById('lengthInput').value);
-    const from = document.getElementById('lengthFrom').value.trim().toLowerCase();
-    const to = document.getElementById('lengthTo').value.time().toLowerCase();
+    const length = document.getElementById('lengthInput').value;
+    const fromUnit = document.getElementById('lengthFrom').value;
+    const toUnit = document.getElementById('lengthTo').value;
 
-    const conversions = {
-        ft: {
-            cm: value * 30.48,
-            m: value * 0.3048
-        },
-        m: {
-            ft: value / 0.3048,
-            cm: value * 100
-        },
-        cm: {
-            ft: value / 30.48,
-            m: value / 100
-        }
-    };
-
-    const result = conversions[from] && conversions[from][to];
-    if (result !== undefined) {
-        document.getElementById('resultText').innerHTML = `Length Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
-    } else {
-        document.getElementById('resultText').innerHTML = 'Invalid conversion units.';
-    }
+    // Call backend for length conversion (use the correct backend API)
+    // Example result:
+    const result = `${length} ${fromUnit} = ${length * 30.48} ${toUnit}`; // For demonstration purposes
+    document.getElementById('resultValue').innerText = result;
+    document.querySelector('.result').style.display = 'block';
 }
 
+// Function to convert weight
 function convertWeight() {
-    const value = parseFloat(document.getElementById('weightInput').value);
-    const from = document.getElementById('weightFrom').value.trim().toLowerCase();
-    const to = document.getElementById('weightTo').value.trim().toLowerCase();
+    const weight = document.getElementById('weightInput').value;
+    const fromUnit = document.getElementById('weightFrom').value;
+    const toUnit = document.getElementById('weightTo').value;
 
-    const conversions = {
-        kg: {
-            lbs: value * 2.20462,
-            g: value * 1000
-        },
-        lbs: {
-            kg: value / 2.20462,
-            g: value * 453.592
-        },
-        g: {
-            kg: value / 1000,
-            lbs: value / 453.592
-        }
-    };
-
-    const result = conversions[from] && conversions[from][to];
-    if(result !== undefined) {
-        document.getElementById('resultText').innerText = `Weight Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
-    } else {
-        document.getElementById('resultText').innerText = 'Invalud conversion  units.';
-    }
+    // Call backend for weight conversion (use the correct backend API)
+    // Example result:
+    const result = `${weight} ${fromUnit} = ${weight * 2.20462} ${toUnit}`; // For demonstration purposes
+    document.getElementById('resultValue').innerText = result;
+    document.querySelector('.result').style.display = 'block';
 }
 
+// Function to convert temperature
 function convertTemperature() {
-    const value = parseFloat(document.getElementById('temperatureInput').value);
-    const from = document.getElementById('temperatureFrom').value.trim().toUpperCase();
-    const to = document.getElementById('temperatureTo').value.trim().toUpperCase();
+    const temp = document.getElementById('temperatureInput').value;
+    const fromUnit = document.getElementById('temperatureFrom').value;
+    const toUnit = document.getElementById('temperatureTo').value;
 
-    let result;
-
-    if (from === 'C' && to === 'F') {
-        result = (value * 9/5) + 32;
-    } else if (from === 'F' && to === 'C') {
-        result = (value - 32) * 5/9; 
-    } else if (from === to) {
-        result = value;
-    } else {
-        document.getElementById('resultText').innerText = 'Invalid temperature units.';
-        return;
+    // Call backend for temperature conversion (use the correct backend API)
+    // Example result:
+    let result = `${temp} ${fromUnit}`;
+    if (fromUnit === 'C' && toUnit === 'F') {
+        result += ` = ${(temp * 9/5) + 32} ${toUnit}`;
+    } else if (fromUnit === 'F' && toUnit === 'C') {
+        result += ` = ${(temp - 32) * 5/9} ${toUnit}`;
     }
-
-    document.getElementById('resultText').innerText = `Temperature Conversion: ${value} ${from} = ${result.toFixed(2)} ${to}`;
+    document.getElementById('resultValue').innerText = result;
+    document.querySelector('.result').style.display = 'block';
 }
 
-// Reset Function
+// Function to reset the form
 function resetForm() {
-    document.querySelectorAll('.input-section input').forEach(input => input.value = '');
-    document.getElementById('resultText').innerText = 'Result of your calculation';
+    document.getElementById('lengthInput').value = '';
+    document.getElementById('weightInput').value = '';
+    document.getElementById('temperatureInput').value = '';
     document.getElementById('resultValue').innerText = '';
+    document.querySelector('.result').style.display = 'none';
 }
-
-// Load the default tab on page load
-document.addEventListener('DOMContentLoaded', () => {
-    showTab('length');
-});
