@@ -59,16 +59,38 @@ async function convertLength() {
 
 
 // Function to convert weight
-function convertWeight() {
+async function convertWeight() {
     const weight = document.getElementById('weightInput').value;
     const fromUnit = document.getElementById('weightFrom').value;
     const toUnit = document.getElementById('weightTo').value;
 
-    // Call backend for weight conversion (use the correct backend API)
-    // Example result:
-    const result = `${weight} ${fromUnit} = ${weight * 2.20462} ${toUnit}`; // For demonstration purposes
-    document.getElementById('resultValue').innerText = result;
-    document.querySelector('.result').style.display = 'block';
+    const requestData = {
+        value: parseFloat(weight),
+        from_unit: fromUnit,
+        to_unit: toUnit
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/weight', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const resultData = await response.json();
+        document.getElementById('resultValue').innerText = `${weight} ${fromUnit} = ${resultData.result} ${toUnit}`;;
+        document.querySelector('.result').style.display = 'block';
+
+    } catch (error) {
+        console.error('Error during conversion:', error);
+        alert('Conversion failed! Please try again.');
+    }
 }
 
 // Function to convert temperature
@@ -81,9 +103,9 @@ function convertTemperature() {
     // Example result:
     let result = `${temp} ${fromUnit}`;
     if (fromUnit === 'C' && toUnit === 'F') {
-        result += ` = ${(temp * 9/5) + 32} ${toUnit}`;
+        result += ` = ${(temp * 9 / 5) + 32} ${toUnit}`;
     } else if (fromUnit === 'F' && toUnit === 'C') {
-        result += ` = ${(temp - 32) * 5/9} ${toUnit}`;
+        result += ` = ${(temp - 32) * 5 / 9} ${toUnit}`;
     }
     document.getElementById('resultValue').innerText = result;
     document.querySelector('.result').style.display = 'block';
