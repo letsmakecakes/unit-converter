@@ -13,7 +13,6 @@ A simple web application to convert between different units of measurement, buil
 ## Table of Contents
 
 - [Features](#features)
-- [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
