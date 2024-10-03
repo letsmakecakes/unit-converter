@@ -23,18 +23,40 @@ function showTab(tab) {
     }
 }
 
-// Function to convert length
-function convertLength() {
+async function convertLength() {
     const length = document.getElementById('lengthInput').value;
     const fromUnit = document.getElementById('lengthFrom').value;
     const toUnit = document.getElementById('lengthTo').value;
 
-    // Call backend for length conversion (use the correct backend API)
-    // Example result:
-    const result = `${length} ${fromUnit} = ${length * 30.48} ${toUnit}`; // For demonstration purposes
-    document.getElementById('resultValue').innerText = result;
-    document.querySelector('.result').style.display = 'block';
+    const requestData = {
+        value: parseFloat(length),  // changed 'length' to 'value'
+        from_unit: fromUnit,
+        to_unit: toUnit
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/length', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const resultData = await response.json();
+
+        document.getElementById('resultValue').innerText = `${length} ${fromUnit} = ${resultData.result} ${toUnit}`;
+        document.querySelector('.result').style.display = 'block';
+    } catch (error) {
+        console.error('Error during conversion:', error);
+        alert('Conversion failed! Please try again.');
+    }
 }
+
 
 // Function to convert weight
 function convertWeight() {
