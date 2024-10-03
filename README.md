@@ -82,11 +82,8 @@ A simple web application to convert between different units of measurement, buil
 
 ## Screenshots
 
-### Length Conversion Interface
-![Length Conversion](path_to_screenshot)
-
-### Conversion Result
-![Conversion Result](path_to_screenshot)
+### Length Conversion Interface and Conversion Result
+![Length Conversion](./interface)
 
 ## License
 
