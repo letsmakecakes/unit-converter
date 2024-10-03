@@ -94,21 +94,38 @@ async function convertWeight() {
 }
 
 // Function to convert temperature
-function convertTemperature() {
+async function convertTemperature() {
     const temp = document.getElementById('temperatureInput').value;
     const fromUnit = document.getElementById('temperatureFrom').value;
     const toUnit = document.getElementById('temperatureTo').value;
 
-    // Call backend for temperature conversion (use the correct backend API)
-    // Example result:
-    let result = `${temp} ${fromUnit}`;
-    if (fromUnit === 'C' && toUnit === 'F') {
-        result += ` = ${(temp * 9 / 5) + 32} ${toUnit}`;
-    } else if (fromUnit === 'F' && toUnit === 'C') {
-        result += ` = ${(temp - 32) * 5 / 9} ${toUnit}`;
+    const requestData = {
+        value: parseFloat(temp),
+        from_unit: fromUnit,
+        to_unit: toUnit
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/temperature', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const resultData = await response.json();
+        document.getElementById('resultValue').innerText = `${temp} ${fromUnit} = ${resultData.result} ${toUnit}`;;
+        document.querySelector('.result').style.display = 'block';
+
+    } catch (error) {
+        console.error('Error during conversion:', error);
+        alert('Conversion failed! Please try again.');
     }
-    document.getElementById('resultValue').innerText = result;
-    document.querySelector('.result').style.display = 'block';
 }
 
 // Function to reset the form
