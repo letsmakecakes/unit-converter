@@ -83,7 +83,7 @@ A simple web application to convert between different units of measurement, buil
 ## Screenshots
 
 ### Length Conversion Interface and Conversion Result
-![Length Conversion](./interface)
+![Length Conversion](./interface.png)
 
 ## License
 
