@@ -52,6 +52,7 @@ func main() {
 	// Conversion route
 	router.POST("/length", handlers.ConvertLength)
 	router.POST("/weight", handlers.ConvertWeight)
+	router.POST("/temperature", handlers.ConvertTemperature)
 
 	// Port for the server
 	port := "3000"
