@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"converters"
+	"models"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -10,25 +11,25 @@ import (
 )
 
 func ConvertLength(c *gin.Context) {
-	var requestData converters.LengthConverter
+	var requestData models.Request
 
 	if err := c.ShouldBindJSON(&requestData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	log.Infof("Obtained request: %+v", requestData)
+	log.Infof("obtained request: %+v", requestData)
 
-	result, err := converters.GetResult(requestData)
+	result, err := converters.ConvertLength(requestData.FromUnit, requestData.ToUnit, requestData.Value)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Use logrus for logging the result
-	log.Infof("Computed result: %v", result)
+	log.Infof("computed result: %+v", result)
 
-	responseData := ResponseData{
+	responseData := models.Response{
 		ComputedResult: result,
 	}
 

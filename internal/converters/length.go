@@ -1,14 +1,10 @@
 package converters
 
-import "errors"
+import (
+	"errors"
+)
 
-type LengthConverter struct {
-	FromUnit string  `json:"from_unit"`
-	ToUnit   string  `json:"to_unit"`
-	Value    float64 `json:"value"`
-}
-
-func (lc LengthConverter) Convert() (float64, error) {
+func ConvertLength(fromUnit, toUnit string, value float64) (float64, error) {
 	conversions := map[string]map[string]float64{
 		"mm":   {"cm": 0.1, "m": 0.001, "km": 1e-6},
 		"cm":   {"mm": 10, "m": 0.01, "km": 1e-5},
@@ -20,9 +16,9 @@ func (lc LengthConverter) Convert() (float64, error) {
 	}
 
 	// Check if the conversion exists
-	if toUnits, ok := conversions[lc.FromUnit]; ok {
-		if factor, ok := toUnits[lc.ToUnit]; ok {
-			return lc.Value * factor, nil
+	if toUnits, ok := conversions[fromUnit]; ok {
+		if factor, ok := toUnits[toUnit]; ok {
+			return value * factor, nil
 		}
 	}
 
